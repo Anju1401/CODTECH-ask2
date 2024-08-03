@@ -7,7 +7,7 @@
   }
   
   body {
-    backgrount-image: url('/img/scratched_metal_26_14_metalness.jpg');
+    backgrount-image: url('img/scratched_metal_26_14_metalness.jpg');
     background-size: cover;
     background-position: center;
   }

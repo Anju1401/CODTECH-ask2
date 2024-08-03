@@ -75,8 +75,8 @@ const questions = [
       question: "Which of the following is an example of Operating system?",
       answers: [
         { text: "Google Chrome", correct: false },
-        { text: "Microsoft Word", correct: true },
-        { text: "Windows", correct: false },
+        { text: "Microsoft Word", correct: false },
+        { text: "Windows", correct: true },
         { text: "Facebook", correct: false },
       ],
     },

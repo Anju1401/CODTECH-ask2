@@ -29,3 +29,7 @@ Usage:
 1. Open the `index.html` file in your web browser.
 2. Answer the questions as they appear.
 3. View your score at the end of the quiz.
+
+
+
+![image](https://github.com/user-attachments/assets/76441db7-e265-40ad-a17d-ac9d162c5d27)

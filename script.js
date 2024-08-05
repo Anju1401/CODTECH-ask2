@@ -1,6 +1,7 @@
 const questions = [
-    {
-      question: "What does the acronym RAM stands for?",
+  {
+    
+    question: "What does the acronym RAM stands for?",
       answers: [
         { text: "Random Access Memory", correct: true },
         { text: "Read Access Memory", correct: false },
@@ -90,132 +91,107 @@ const questions = [
       ],
     },
   ];
-  
-  const questionElement = document.getElementById("question");
-  const answerButtons = document.getElementById("answer-buttons");
-  const nextButton = document.getElementById("next-btn");
-  const confettiContainer = document.getElementById("confetti-container");
-  const messageContainer = document.getElementById("message-container");
-  const messageElement = document.getElementById("message");
-  const restartButton = document.getElementById("restart-btn");
-  
-  let currentQuestionIndex = 0;
-  let score = 0;
-    function startQuiz() {
-    currentQuestionIndex = 0;
-    score = 0;
-    nextButton.innerHTML = "Next";
+
+const questionElement = document.getElementById("question");
+const answerbuttons = document.getElementById("answer-buttons");
+const nextButton = document.getElementById("next-btn");
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+function startQuiz() {
+  currentQuestionIndex = 0;
+  score = 0;
+  nextButton.innerHTML = "Next";
+  showQuestion();
+}
+
+function showQuestion() {
+  resetState();
+  let currentQuestion = questions[currentQuestionIndex];
+  let questionNo = currentQuestionIndex + 1;
+  questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
+
+  currentQuestion.answers.forEach((answer) => {
+    const button = document.createElement("button");
+    button.innerHTML = answer.text;
+    button.classList.add("btn");
+    answerbuttons.appendChild(button);
+    if (answer.correct) {
+      button.dataset.correct = answer.correct;
+    }
+    button.addEventListener("click", (e) => selectAnswer(e));
+  });
+}
+
+function resetState() {
+  //Hide the "Next" button
+  nextButton.style.display = "none";
+
+  //Remove all child element from the 'asnwerbuttons' container
+  while (answerbuttons.firstChild) {
+    answerbuttons.removeChild(answerbuttons.firstChild);
+  }
+}
+
+function selectAnswer(e) {
+  // Get the button that was clicked
+  const selectedBtn = e.target;
+
+  // Check if the selected answer is correct based on the 'data-correct' attribute
+  const isCorrect = selectedBtn.dataset.correct === "true";
+
+  // Add a class to the selected button based on correctness
+  if (isCorrect) {
+    selectedBtn.classList.add("correct");
+    score++; // Increment the score only for correct answers
+  } else {
+    selectedBtn.classList.add("incorrect");
+  }
+
+  Array.from(answerbuttons.children).forEach((button) => {
+    // Check if the button is marked as correct
+    if (button.dataset.correct === "true") {
+      // Add the "correct" class to the button
+      button.classList.add("correct");
+    }
+    // Disable the button
+    button.disabled = true;
+  });
+  // Display the "Next" button
+  nextButton.style.display = "block";
+}
+
+function showScore() {
+  // Reset the state (clears buttons and hides "Next" button)
+  resetState();
+  // Display the final score
+  questionElement.innerHTML = `You scored ${score} out of ${questions.length}`;
+  // Change the "Next" button text to "Play Again"
+  nextButton.innerHTML = "Play Again";
+  // Display the "Next" button
+  nextButton.style.display = "block";
+}
+
+function handleNextButton() {
+  // Increment the current question index
+  currentQuestionIndex++;
+  // Check if there are more questions
+  if (currentQuestionIndex < questions.length) {
+    // If there are more questions, display the next question
     showQuestion();
+  } else {
+    // If there are no more questions, display the final score
+    showScore();
   }
-  
-  function showQuestion() {
-    resetState();
-    let currentQuestion = questions[currentQuestionIndex];
-    let questionNo = currentQuestionIndex + 1;
-    questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
-  
-    currentQuestion.answers.forEach((answer) => {
-      const button = document.createElement("button");
-      button.innerHTML = answer.text;
-      button.classList.add("btn");
-      answerButtons.appendChild(button);
-      if (answer.correct) {
-        button.dataset.correct = answer.correct;
-      }
-      button.addEventListener("click", (e) => selectAnswer(e));
-    });
-  
-    resetTimer(); // Reset and start the timer for the current question
-  }
-  
-  function resetState() {
-    nextButton.style.display = "none";
-    while (answerButtons.firstChild) {
-      answerButtons.removeChild(answerButtons.firstChild);
-    }
-    const celebration = document.querySelector(".celebration");
-    if (celebration) {
-      celebration.remove();
-    }
-    document.querySelectorAll(".confetti").forEach(confetti => confetti.remove());
-    messageContainer.style.display = "none";
-  }
-  
-  function selectAnswer(e) {
-    const selectedBtn = e.target;
-    const isCorrect = selectedBtn.dataset.correct === "true";
-    if (isCorrect) {
-      selectedBtn.classList.add("correct");
-      score++;
-      showCelebration();
-    } else {
-      selectedBtn.classList.add("incorrect");
-    }
-  
-    Array.from(answerButtons.children).forEach((button) => {
-      if (button.dataset.correct === "true") {
-        button.classList.add("correct");
-      }
-      button.disabled = true;
-    });
-    nextButton.style.display = "block";
-        }
-  
-  function showCelebration() {
-    const celebration = document.createElement("div");
-    celebration.classList.add("celebration");
-    celebration.innerText = "Correct! 🎉 Great job!";
-    document.body.appendChild(celebration);
-  
-    const numberOfConfetti = 50;
-    for (let i = 0; i < numberOfConfetti; i++) {
-      const confetti = document.createElement("div");
-      confetti.classList.add("confetti");
-  
-      const size = Math.random() * 10 + 10;
-      confetti.style.width = `${size}px`;
-      confetti.style.height = `${size}px`;
-  
-      confetti.style.backgroundColor = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.random()})`;
-      confetti.style.left = `${Math.random() * 100}%`;
-      confetti.style.animationDelay = `${Math.random() * 2}s`;
-  
-      confettiContainer.appendChild(confetti);
-    }
-  }
-  
-  function showScore() {
-    resetState();
-    questionElement.innerHTML = `You scored ${score} out of ${questions.length}`;
-    nextButton.innerHTML = "Play Again";
-    nextButton.style.display = "block";
-    timerElement.style.display = "none"; // Hide the timer when showing the score
-  }
-  
-  function handleNextButton() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
-      showQuestion();
-    } else {
-      showScore();
-    }
-  }
-    function restartQuiz() {
-    messageContainer.style.display = "none";
+}
+
+nextButton.addEventListener("click", () => {
+  if (currentQuestionIndex < questions.length) {
+    handleNextButton();
+  } else {
     startQuiz();
   }
-  
-  nextButton.addEventListener("click", () => {
-      console.log("Next button clicked");
-      currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
-      handleNextButton();
-    } else {
-      startQuiz();
-    }
-  });
-  
-  restartButton.addEventListener("click", restartQuiz);
-  
-  startQuiz();
-  
+});
+
+startQuiz();

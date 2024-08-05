@@ -159,8 +159,7 @@ const questions = [
       button.disabled = true;
     });
     nextButton.style.display = "block";
-    clearInterval(timer); // Stop the timer when an answer is selected
-  }
+        }
   
   function showCelebration() {
     const celebration = document.createElement("div");

@@ -206,6 +206,8 @@ const questions = [
   }
   
   nextButton.addEventListener("click", () => {
+      console.log("Next button clicked");
+      currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
       handleNextButton();
     } else {
